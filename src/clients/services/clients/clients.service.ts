@@ -15,4 +15,9 @@ export class ClientsService {
   createClientService(body: AddNewClient) {
     this.users.push(body);
   }
+
+  //getting all the clients
+  getAllClients() {
+    return this.users;
+  }
 }
