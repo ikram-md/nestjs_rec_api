@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AddNewClient } from 'src/clients/dtos/addNewClient.dto';
 
 @Injectable()
 export class ClientsService {
@@ -9,5 +10,9 @@ export class ClientsService {
   ];
   findOneClient(id: number) {
     return this.users.find((u) => u.id === id);
+  }
+  //add the service over here.
+  createClientService(body: AddNewClient) {
+    this.users.push(body);
   }
 }
