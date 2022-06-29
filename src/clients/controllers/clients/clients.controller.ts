@@ -7,6 +7,8 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AddNewClient } from 'src/clients/dtos/addNewClient.dto';
 import { ClientsService } from 'src/clients/services/clients/clients.service';
@@ -23,7 +25,20 @@ export class ClientsController {
   }
 
   @Post('/add')
+  @UsePipes(ValidationPipe)
   addNewClient(@Body() addNewClient: AddNewClient) {
     console.log(addNewClient);
+    return { msg: 'succesfully added the client ' };
+  }
+
+  @Get('/all')
+  getAllClients() {
+    const allusers = this.clientService.getAllClients();
+    if (allusers) return allusers;
+    else
+      throw new HttpException(
+        'Cannot fetch all clients',
+        HttpStatus.BAD_REQUEST,
+      );
   }
 }
