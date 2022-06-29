@@ -1,11 +1,14 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
+  Post,
 } from '@nestjs/common';
+import { AddNewClient } from 'src/clients/dtos/addNewClient.dto';
 import { ClientsService } from 'src/clients/services/clients/clients.service';
 
 @Controller('clients')
@@ -17,5 +20,10 @@ export class ClientsController {
     const foundClient = this.clientService.findOneClient(id);
     if (foundClient) return foundClient;
     else throw new HttpException('Client was not found ', HttpStatus.NOT_FOUND);
+  }
+
+  @Post('/add')
+  addNewClient(@Body() addNewClient: AddNewClient) {
+    console.log(addNewClient);
   }
 }
