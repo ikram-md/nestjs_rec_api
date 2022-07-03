@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
@@ -6,7 +7,11 @@ import {
   Inject,
   Param,
   ParseIntPipe,
+  Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
+import { CreateUserDTO } from 'src/users/dtos/CreateUser.dto';
 import { UserNotFound } from 'src/users/exceptions/UserNotFound.exception';
 import { UsersService } from 'src/users/services/users/users.service';
 
@@ -16,30 +21,13 @@ export class UsersController {
     @Inject('USER_SERVICE') private readonly userService: UsersService,
   ) {}
 
-  @Get('/')
-  getAllUsers() {
-    const all_users = this.userService.getAllUsers();
-    if (all_users) return all_users;
+  //Create a new user
+  @Post('create')
+  @UsePipes(ValidationPipe)
+  createNewUser(@Body() createNewUser: CreateUserDTO) {
+    const new_user = this.userService.createNewUser(createNewUser);
+    if (new_user) return new_user;
     else
-      throw new HttpException(
-        'Cannot get the list of users ',
-        HttpStatus.BAD_REQUEST,
-      );
-  }
-
-  //Fetch the user by their username
-  @Get('username/:username')
-  getUserByUsername(@Param('username') username: string) {
-    const user = this.userService.getUserByUsername(username);
-    if (user) return user;
-    else throw new HttpException('User not found ', HttpStatus.NOT_FOUND);
-  }
-
-  //Fetch the user by their id
-  @Get('id/:id')
-  getUserById(@Param('id', ParseIntPipe) id: number) {
-    const user = this.userService.getUserById(id);
-    if (user) return user;
-    else throw new UserNotFound(id);
+      throw new HttpException('User creation failed', HttpStatus.BAD_REQUEST);
   }
 }

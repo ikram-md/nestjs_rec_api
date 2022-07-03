@@ -1,10 +1,9 @@
 import { Exclude } from 'class-transformer';
 
 export interface User {
-  id: number;
   username: string;
   password: string;
-  profile_desc: string;
+  email: string;
 }
 
 export class SerializedUser {
