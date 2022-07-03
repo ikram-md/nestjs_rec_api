@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { METHODS } from 'http';
 import { UsersController } from './controller/users/users.controller';
+import { ValidateUserAccount } from './middlewares/validate-account.middleware';
 import { ValidatorMiddleware } from './middlewares/validate.middleware';
 import { UsersService } from './services/users/users.service';
 
@@ -15,8 +16,6 @@ import { UsersService } from './services/users/users.service';
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ValidatorMiddleware)
-      .forRoutes({ path: 'users/:username', method: RequestMethod.GET });
+    consumer.apply(ValidateUserAccount).forRoutes(UsersController);
   }
 }
