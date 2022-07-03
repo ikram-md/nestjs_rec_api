@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { User as UserEntity } from 'src/typeorm/entities/User';
@@ -14,7 +14,16 @@ export class UsersService {
   ) {}
   async createNewUser(newUser: CreateUserDTO) {
     //TODO: check is there's a user with a similar email
-    //TODO: crypt the user's password
+    const user_with_email = await this.userRepo.findOne({
+      where: { email: newUser.email },
+    });
+    console.log(user_with_email);
+    if (user_with_email) {
+      return new HttpException(
+        'User with email already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const neUsr: UserEntity = this.userRepo.create(newUser);
     return this.userRepo.save(neUsr);
   }
