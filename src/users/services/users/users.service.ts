@@ -1,41 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass, plainToInstance } from 'class-transformer';
+import { User as UserEntity } from 'src/typeorm/entities/User';
+import { CreateUserDTO } from 'src/users/dtos/CreateUser.dto';
 import { SerializedUser, User } from 'src/users/types';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [
-    {
-      id: 1,
-      username: 'user1',
-      password: 'password123',
-      profile_desc: 'lorem epsum',
-    },
-    {
-      id: 2,
-      username: 'user2',
-      password: 'password1234',
-      profile_desc: 'lorem epsum',
-    },
-    {
-      id: 3,
-      username: 'user3',
-      password: 'password1234',
-      profile_desc: 'lorem epsum',
-    },
-  ];
-
-  getAllUsers() {
-    return this.users.map((u) => plainToInstance(SerializedUser, u));
-  }
-
-  getUserByUsername(u: string) {
-    const usr = this.users.find((usr) => usr.username === u);
-    return plainToInstance(SerializedUser, usr);
-  }
-
-  getUserById(id: number) {
-    const usr = this.users.find((u) => u.id === id);
-    return plainToInstance(SerializedUser, usr);
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+  ) {}
+  async createNewUser(newUser: CreateUserDTO) {
+    //TODO: check is there's a user with a similar email
+    //TODO: crypt the user's password
+    const neUsr: UserEntity = this.userRepo.create(newUser);
+    return this.userRepo.save(neUsr);
   }
 }
