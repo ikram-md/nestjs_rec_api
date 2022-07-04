@@ -11,13 +11,15 @@ async function bootstrap() {
     session({
       secret: `${process.env.SESSION_SECRET}`,
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: {
         maxAge: 60000,
         secure: true,
       },
     }),
   );
+  app.use(passport.initialize());
+  app.use(passport.session());
   await app.listen(8000);
 }
 bootstrap();
