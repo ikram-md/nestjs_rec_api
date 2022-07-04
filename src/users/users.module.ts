@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { METHODS } from 'http';
+import { AuthenticationService } from 'src/authentication/services/authentication.service';
 import { User } from 'src/typeorm/entities/User';
 import { UsersController } from './controller/users/users.controller';
 import { ValidateUserAccount } from './middlewares/validate-account.middleware';
