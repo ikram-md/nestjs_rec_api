@@ -9,6 +9,7 @@ import { UsersController } from './users/controller/users/users.controller';
 import { UsersService } from './users/services/users/users.service';
 import { AuthenticationService } from './authentication/services/authentication.service';
 import { AuthenticationController } from './authentication/controllers/authentication.controller';
+import { PassportModule } from '@nestjs/passport';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dotenv = require('dotenv');
 dotenv.config();
@@ -27,8 +28,11 @@ dotenv.config();
       logging: true,
     }),
     AuthenticationModule,
+    PassportModule.register({
+      session: true,
+    }),
   ],
-  controllers: [ClientsController],
-  providers: [ClientsService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

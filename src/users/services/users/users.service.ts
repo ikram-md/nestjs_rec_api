@@ -10,9 +10,9 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
   ) {}
-  async createNewUser(newUser: CreateUserDTO) {
+  createNewUser(newUser: CreateUserDTO) {
     //TODO: check is there's a user with a similar email
-    const user_with_email = await this.userRepo.findOne({
+    const user_with_email = this.userRepo.findOne({
       where: { email: newUser.email },
     });
     console.log(user_with_email);
@@ -31,5 +31,9 @@ export class UsersService {
     console.log(usr);
     if (usr) return usr;
     return null;
+  }
+
+  findUserById(id: number) {
+    return this.userRepo.findOne({ where: { id } });
   }
 }

@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthenticationController } from './controllers/authentication.controller';
 import { AuthenticationService } from './services/authentication.service';
 import { LocalStrategy } from './utils/LocalStrategy';
+import { SessionSerializer } from './utils/session.serilizer';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 @Module({
@@ -18,7 +19,6 @@ require('dotenv').config();
     }),
     TypeOrmModule.forFeature([User]),
     UsersModule,
-    PassportModule,
   ],
   controllers: [AuthenticationController],
   providers: [
@@ -29,6 +29,7 @@ require('dotenv').config();
     },
     LocalStrategy,
     JwtService,
+    SessionSerializer,
   ],
 })
 export class AuthenticationModule {}
