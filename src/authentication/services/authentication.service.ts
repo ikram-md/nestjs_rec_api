@@ -1,11 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users/users.service';
 import * as bcrypt from 'bcrypt';
-
+import { JwtService } from '@nestjs/jwt';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 @Injectable()
 export class AuthenticationService {
   constructor(
     @Inject('USER_SERVICE') private readonly usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   async findUserByUsername(username: string, password: string): Promise<any> {
@@ -17,5 +20,14 @@ export class AuthenticationService {
       return username;
     }
     return null;
+  }
+
+  async login(user: any) {
+    const payload = { username: user.username, sub: user.id };
+    return {
+      token: this.jwtService.sign(payload, {
+        secret: `${process.env.JWT_SECRET}`,
+      }),
+    };
   }
 }
