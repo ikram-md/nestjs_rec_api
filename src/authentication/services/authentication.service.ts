@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -19,15 +19,13 @@ export class AuthenticationService {
       const { username } = found_user;
       return username;
     }
-    return null;
+    throw new HttpException('Passwords do not match', HttpStatus.UNAUTHORIZED);
   }
 
   async login(user: any) {
     const payload = { username: user.username, sub: user.id };
-    return {
-      token: this.jwtService.sign(payload, {
-        secret: `${process.env.JWT_SECRET}`,
-      }),
-    };
+    return this.jwtService.sign(payload, {
+      secret: `${process.env.JWT_SECRET}`,
+    });
   }
 }
