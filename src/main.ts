@@ -14,7 +14,7 @@ async function bootstrap() {
       saveUninitialized: true,
       cookie: {
         maxAge: 60000,
-        secure: true,
+        secure: false,
       },
     }),
   );
