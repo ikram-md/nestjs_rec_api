@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Inject,
   Injectable,
   Post,
@@ -9,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthenticationService } from '../services/authentication.service';
-import { LocalGuard } from '../utils/LocalGuard';
+import { AuthenticatedGuard, LocalGuard } from '../utils/LocalGuard';
 @Injectable()
 @Controller('auth')
 export class AuthenticationController {
@@ -20,10 +21,17 @@ export class AuthenticationController {
   @Post('login')
   async logIn(@Request() req, @Session() session: Record<string, any>) {
     req.session.user = req.user;
+
     return {
       token: await this.authService.login(req.user),
       session: session.id,
     };
   }
-  //implement the sign up controller
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('catch-me')
+  catchMe(@Request() req) {
+    console.log("You don't have access to this route");
+    return { msg: 'you caught me!' };
+  }
 }
