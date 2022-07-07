@@ -10,6 +10,7 @@ import { UsersService } from './users/services/users/users.service';
 import { AuthenticationService } from './authentication/services/authentication.service';
 import { AuthenticationController } from './authentication/controllers/authentication.controller';
 import { PassportModule } from '@nestjs/passport';
+import { MoviesModule } from './movies/movies.module';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dotenv = require('dotenv');
 dotenv.config();
@@ -31,6 +32,7 @@ dotenv.config();
     PassportModule.register({
       session: true,
     }),
+    MoviesModule,
   ],
   controllers: [],
   providers: [],
